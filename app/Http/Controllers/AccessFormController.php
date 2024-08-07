@@ -2,70 +2,75 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AccessForm;
 use Illuminate\Http\Request;
+use App\Models\AccessForm;
+use App\Models\Visitor;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class AccessFormController extends Controller
 {
-    // Metode untuk menampilkan daftar formulir
-    public function index()
-    {
-        $forms = AccessForm::all(); // Mengambil semua data formulir
-        return view('access_forms.index', compact('forms')); // Menampilkan tampilan dengan data
-    }
-
-    // Metode untuk menyimpan data formulir
-    public function store(Request $request)
-    {
-        $request->validate([
-            'requestor_name' => 'required|string',
-            'company_name' => 'required|string',
-            'address' => 'required|string',
-            'phone_number' => 'required|string',
-            'mobile_number' => 'required|string',
-            'email' => 'required|email',
-            'date_of_request' => 'required|date',
-            'country' => 'nullable|string',
-            'data_center' => 'nullable|string',
-            'data_center_address' => 'nullable|string',
-            'visit_from_date' => 'nullable|date',
-            'visit_from_time' => 'nullable|date_format:H:i',
-            'visit_to_date' => 'nullable|date',
-            'visit_to_time' => 'nullable|date_format:H:i',
-            'visit_purpose' => 'nullable|string',
-            'permit_to_work' => 'nullable|boolean',
-            'rack_id' => 'nullable|string',
-            'photo' => 'nullable|image'
-        ]);
-    
-        $form = new AccessForm();
-        $form->requestor_name = $request->input('requestor_name');
-        $form->company_name = $request->input('company_name');
-        $form->address = $request->input('address');
-        $form->phone_number = $request->input('phone_number');
-        $form->mobile_number = $request->input('mobile_number');
-        $form->email = $request->input('email');
-        $form->date_of_request = $request->input('date_of_request');
-        $form->country = $request->input('country');
-        $form->data_center = $request->input('data_center');
-        $form->data_center_address = $request->input('data_center_address');
-        $form->visit_from_date = $request->input('visit_from_date');
-        $form->visit_from_time = $request->input('visit_from_time');
-        $form->visit_to_date = $request->input('visit_to_date');
-        $form->visit_to_time = $request->input('visit_to_time');
-        $form->visit_purpose = $request->input('visit_purpose');
-        $form->permit_to_work = $request->input('permit_to_work') ? true : false;
-        $form->rack_id = $request->input('rack_id');
-    
-        if ($request->hasFile('photo')) {
-            $form->photo = $request->file('photo')->store('photos', 'public');
-        }
-    
-        $form->save();
-
-        // Debugging purposes
-        \Log::info('Form data', $form->toArray());
-    
-        return redirect()->route('access_forms.index')->with('success', 'Form successfully created');
-    }
+    public function create()
+{
+    return view('forms.create');
 }
+
+    // Menampilkan data formulir
+    public function index()
+{
+    $forms = AccessForm::with('visitors')->get(); // Pastikan data pengunjung juga diambil
+    return view('access_forms.index', compact('forms'));
+}
+        
+        public function store(Request $request)
+        {
+            // Validasi data
+            $validatedData = $request->validate([
+                'requestor_name' => 'required|string|max:255',
+                'company_name' => 'required|string|max:255',
+                'address' => 'required|string',
+                'phone_number' => 'required|string',
+                'mobile_number' => 'required|string',
+                'email' => 'required|email',
+                'date_of_request' => 'required|date',
+                'country' => 'required|string',
+                'data_center' => 'required|string',
+                'data_center_address' => 'required|string',
+                'visit_from_date' => 'required|date',
+                'visit_from_time' => 'required|date_format:H:i',
+                'visit_to_date' => 'required|date',
+                'visit_to_time' => 'required|date_format:H:i',
+                'purpose_of_visit' => 'required|string',
+                'number_of_visitors' => 'required|integer',
+                'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Validasi foto
+            ]);
+        
+            // Proses upload foto jika ada
+            if ($request->hasFile('photo')) {
+                $photoPath = $request->file('photo')->store('photos', 'public');
+                $validatedData['photo'] = $photoPath;
+            }
+        
+            // Simpan data ke database
+            $form = AccessForm::create($validatedData);
+        
+            // Simpan data pengunjung
+            for ($i = 1; $i <= $validatedData['number_of_visitors']; $i++) {
+                if ($request->has("visitor_name_$i")) {
+                    $form->visitors()->create([
+                        'visitor_name' => $request->input("visitor_name_$i"),
+                        'visitor_type' => $request->input("visitor_type_$i"),
+                        'visitor_designation' => $request->input("visitor_designation_$i"),
+                        'visitor_company_name' => $request->input("visitor_company_$i"),
+                        'identity_number' => $request->input("visitor_id_$i"),
+                        'visitor_phone_number' => $request->input("visitor_phone_$i"),
+                        'visitor_email' => $request->input("visitor_email_$i"),
+                        'vehicle_number' => $request->input("visitor_vehicle_$i"),
+                    ]);
+                }
+            }
+        
+            // Redirect dengan pesan sukses
+            return redirect()->route('access_forms.index')->with('success', 'Formulir berhasil disimpan!');
+        }
+    }        
