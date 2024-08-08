@@ -15,6 +15,11 @@
 
     <style>
         /* CSS untuk mengatur ukuran dan tampilan logo */
+
+        .nav-item {
+            right: 0;
+            left: auto;
+        }
         .brand-link {
             display: flex;
             align-items: center;
@@ -32,7 +37,7 @@
         }
 
         .nav-link {
-            padding: 0.5rem 1rem; /* Sesuaikan padding untuk link navigasi */
+            padding: 0.5rem 1rem; /* Sesuaikan padding untuk link navigasi */  
         }
     </style>
 </head>
@@ -40,10 +45,29 @@
     <div class="wrapper">
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand navbar-dark navbar-primary">
+            <!-- Left navbar links -->
             <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
                 </li>
+            </ul>
+
+            <!-- Right navbar links -->
+            <ul class="navbar-nav ms-auto">
+                @if (Auth::check())
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user"></i> {{ Auth::user()->name }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user"></i> Profile</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                        </ul>
+                    </li>
+                @endif
             </ul>
         </nav>
 
@@ -63,15 +87,22 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{ route('forms.create') }}" class="nav-link @if(request()->routeIs('forms.create')) active @endif">
+                                <i class="nav-icon fas fa-plus-circle"></i>
+                                <p>Isi Formulir</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ route('access_forms.index') }}" class="nav-link @if(request()->routeIs('access_forms.index')) active @endif">
                                 <i class="nav-icon fas fa-folder"></i>
                                 <p>Formulir</p>
                             </a>
                         </li>
+                        <!-- Menambahkan link untuk Visitor -->
                         <li class="nav-item">
-                            <a href="{{ route('forms.create') }}" class="nav-link @if(request()->routeIs('forms.create')) active @endif">
-                                <i class="nav-icon fas fa-plus-circle"></i>
-                                <p>Isi Formulir</p>
+                            <a href="{{ route('visitors.index') }}" class="nav-link @if(request()->routeIs('visitors.index')) active @endif">
+                                <i class="nav-icon fas fa-users"></i>
+                                <p>Visitor</p>
                             </a>
                         </li>
                         <!-- Add more links as needed -->

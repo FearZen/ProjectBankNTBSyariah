@@ -64,34 +64,7 @@
                             <td>{{ $form->rack_id }}</td>
                             <td>
                                 @if ($form->visitors->count() > 0)
-                                <button type="button" class="btn btn-info" data-bs-toggle="collapse" data-bs-target="#visitor-details-{{ $form->id }}">Lihat Detail</button>
-                                <div id="visitor-details-{{ $form->id }}" class="collapse mt-2">
-                                    <div class="accordion" id="accordion-{{ $form->id }}">
-                                        @foreach ($form->visitors as $visitor)
-                                        <div class="card mb-2">
-                                            <div class="card-header" id="heading-{{ $visitor->id }}">
-                                                <h5 class="mb-0">
-                                                    <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ $visitor->id }}" aria-expanded="true" aria-controls="collapse-{{ $visitor->id }}">
-                                                        {{ $visitor->visitor_name }}
-                                                    </button>
-                                                </h5>
-                                            </div>
-
-                                            <div id="collapse-{{ $visitor->id }}" class="collapse" aria-labelledby="heading-{{ $visitor->id }}" data-bs-parent="#accordion-{{ $form->id }}">
-                                                <div class="card-body">
-                                                    <strong>Tipe Pengunjung:</strong> {{ $visitor->visitor_type }}<br>
-                                                    <strong>Jabatan:</strong> {{ $visitor->visitor_designation }}<br>
-                                                    <strong>Nama Perusahaan:</strong> {{ $visitor->visitor_company_name }}<br>
-                                                    <strong>Nomor Identitas:</strong> {{ $visitor->identity_number }}<br>
-                                                    <strong>Nomor Telepon:</strong> {{ $visitor->visitor_phone_number }}<br>
-                                                    <strong>Email:</strong> {{ $visitor->visitor_email }}<br>
-                                                    <strong>Nomor Kendaraan:</strong> {{ $visitor->vehicle_number }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        @endforeach
-                                    </div>
-                                </div>
+                                <button type="button" class="btn btn-info" onclick="showVisitorDetails({{ $form->id }})">Lihat Detail</button>
                                 @else
                                 No visitors
                                 @endif
@@ -106,23 +79,120 @@
     <!-- Table End -->
 </div>
 
-@section('scripts')
-<script>
-    function openPopup(src) {
-        const popup = document.getElementById('popup');
-        const popupImg = document.getElementById('popup-img');
-        popupImg.src = src;
-        popup.style.display = 'flex';
+<!-- Modal -->
+<div id="visitorDetailsModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Visitor Details</h2>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Nama</th>
+                    <th>Jenis Pengunjung</th>
+                    <th>Jabatan</th>
+                    <th>Nama Perusahaan</th>
+                    <th>Nomor Identitas</th>
+                    <th>Nomor Telepon</th>
+                    <th>Email</th>
+                    <th>Nomor Kendaraan</th>
+                </tr>
+            </thead>
+            <tbody id="visitor-details-body">
+                <!-- Visitor details will be appended here by JavaScript -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section('styles')
+<style>
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
     }
 
-    function closePopup() {
-        const popup = document.getElementById('popup');
-        popup.style.display = 'none';
+    .modal-content {
+        background-color: #fefefe;
+        margin: 5% auto; /* 5% from the top and centered */
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%; /* Could be more or less, depending on screen size */
+        max-height: 80vh; /* Limit height to 80% of viewport */
+        overflow-y: auto; /* Enable vertical scrolling */
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+</style>
+@endsection
+
+@section('scripts')
+<script>
+    function showVisitorDetails(formId) {
+        const visitorDetailsBody = document.getElementById('visitor-details-body');
+        visitorDetailsBody.innerHTML = '';
+
+        fetch(`/forms/${formId}/visitors`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.visitors && data.visitors.length > 0) {
+                    data.visitors.forEach(visitor => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${visitor.visitor_name}</td>
+                            <td>${visitor.visitor_type}</td>
+                            <td>${visitor.visitor_designation}</td>
+                            <td>${visitor.visitor_company_name}</td>
+                            <td>${visitor.identity_number}</td>
+                            <td>${visitor.visitor_phone_number}</td>
+                            <td>${visitor.visitor_email}</td>
+                            <td>${visitor.vehicle_number}</td>
+                        `;
+                        visitorDetailsBody.appendChild(row);
+                    });
+                } else {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `<td colspan="8">No visitors found</td>`;
+                    visitorDetailsBody.appendChild(row);
+                }
+                document.getElementById('visitorDetailsModal').style.display = 'block';
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+                const row = document.createElement('tr');
+                row.innerHTML = `<td colspan="8">Failed to load visitor details</td>`;
+                visitorDetailsBody.appendChild(row);
+                document.getElementById('visitorDetailsModal').style.display = 'block';
+            });
+    }
+
+    function closeModal() {
+        document.getElementById('visitorDetailsModal').style.display = 'none';
     }
 </script>
-<div id="popup" class="image-popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); justify-content: center; align-items: center; z-index: 1000;">
-    <span class="close" style="position: absolute; top: 20px; right: 20px; font-size: 2em; color: #fff; cursor: pointer;" onclick="closePopup()">&times;</span>
-    <img id="popup-img" src="" alt="Popup Image" style="max-width: 90%; max-height: 90%; border-radius: 5px;">
-</div>
 @endsection
 @endsection

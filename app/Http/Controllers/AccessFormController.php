@@ -14,6 +14,16 @@ class AccessFormController extends Controller
 {
     return view('forms.create');
 }
+public function getVisitors($formId)
+{
+    $form = AccessForm::with('visitors')->find($formId);
+    if ($form) {
+        return response()->json(['visitors' => $form->visitors]);
+    } else {
+        return response()->json(['error' => 'Form not found'], 404);
+    }
+}
+
 
     // Menampilkan data formulir
     public function index()
@@ -40,10 +50,12 @@ class AccessFormController extends Controller
                 'visit_from_time' => 'required|date_format:H:i',
                 'visit_to_date' => 'required|date',
                 'visit_to_time' => 'required|date_format:H:i',
-                'purpose_of_visit' => 'required|string',
+                'visit_purpose' => 'required|string|max:255',
+                'rack_id' => 'required|string|max:255',
                 'number_of_visitors' => 'required|integer',
                 'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Validasi foto
             ]);
+            
         
             // Proses upload foto jika ada
             if ($request->hasFile('photo')) {

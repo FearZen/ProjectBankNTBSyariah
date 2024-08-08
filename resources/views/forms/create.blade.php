@@ -77,7 +77,11 @@
                     </div>
                     <div class="form-group">
                         <label for="purpose_of_visit">Tujuan Kunjungan (Purpose of Visit):</label>
-                        <input type="text" class="form-control" name="purpose_of_visit" id="purpose_of_visit" required>
+                        <input type="text" class="form-control" name="visit_purpose" id="visit_purpose" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="rack_id">Rack ID dari Rack yang akan diakses (termasuk ID Ruangan dan/atau ID Cage) (Rack ID of Rack to access to (include Room ID and / or Cage ID)):</label>
+                        <input type="text" class="form-control" name="rack_id" id="rack_id" required>
                     </div>
                     <div class="form-group">
                         <label for="photo">Upload Foto/KTP:</label>
