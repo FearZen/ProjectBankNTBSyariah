@@ -13,6 +13,7 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\CompanyController;
 
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])
     ->name('login');
@@ -73,6 +74,10 @@ Route::post('/access-forms', [AccessFormController::class, 'store'])
 
 Route::get('/access-forms', [AccessFormController::class, 'index'])
     ->name('access_forms.index');
+
+Route::get('/companies/create', [CompanyController::class, 'create'])->name('companies.create');
+Route::post('/companies/store', [CompanyController::class, 'store'])->name('companies.store');
+
 
 // Rute untuk visitor
 Route::get('/visitors', [VisitorController::class, 'index'])->name('visitors.index');

@@ -18,7 +18,7 @@
         <div class="input-group">
             <input type="text" name="search" class="form-control" placeholder="Cari pengunjung..." value="{{ request('search') }}">
             <div class="input-group-append">
-                <button class="btn btn-primary" type="submit">Cari</button>
+            <button class="btn btn-primary" type="submit" style="background-color: #0B6E45; border-color: #0B6E45;">Cari</button>
             </div>
         </div>
     </form>

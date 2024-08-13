@@ -1,13 +1,13 @@
 @extends('layouts.app') <!-- Ganti dengan path ke layout dashboard Anda -->
 
-@section('title', 'Create Access Form')
+@section('title', 'Isi Formulir')
 
 @section('content')
 <div class="container-fluid">
     <!-- Formulir Start -->
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Create Access Form</h3>
+            <h3 class="card-title">Silahkan Isi Formulir Di bawah</h3>
         </div>
         <div class="card-body">
             <form action="{{ route('access_forms.store') }}" method="POST" enctype="multipart/form-data">
@@ -19,9 +19,23 @@
                         <input type="text" class="form-control" name="requestor_name" id="requestor_name" required>
                     </div>
                     <div class="form-group">
-                        <label for="company_name">Nama Perusahaan Pemohon (Requestor's Company Name):</label>
-                        <input type="text" class="form-control" name="company_name" id="company_name" required>
-                    </div>
+    <label for="company_name">Nama Perusahaan Pemohon (Requestor's Company Name):</label>
+    <input type="text" class="form-control" id="company_name" list="company_list" name="company_name" required>
+    <datalist id="company_list">
+        @foreach($companies as $company)
+            <option value="{{ $company->name }}">{{ $company->name }}</option>
+        @endforeach
+    </datalist>
+    <a href="{{ route('companies.create') }}" class="btn btn-link" style="color: #0B6E45; text-decoration: none;">Tambah Perusahaan Baru</a>
+<style>
+    .btn-link:hover {
+        color: #085d3a; 
+        text-decoration: underline; 
+    }
+</style>
+
+</div>
+
                     <div class="form-group">
                         <label for="address">Alamat (Address):</label>
                         <input type="text" class="form-control" name="address" id="address" required>
@@ -42,7 +56,8 @@
                         <label for="date_of_request">Tanggal Permohonan (Date of Request):</label>
                         <input type="date" class="form-control" name="date_of_request" id="date_of_request" required>
                     </div>
-                    <button type="button" class="btn btn-primary" onclick="showSection(2)">Next</button>
+                    <button type="button" class="btn btn-primary" onclick="showSection(2)" style="background-color: #0B6E45; border-color: #0B6E45;">Next</button>
+
                 </div>
 
                 <div id="section2" style="display: none;">
@@ -90,14 +105,28 @@
                     <div class="form-group">
                         <label for="camera-video">Camera:</label>
                         <video id="camera-video" width="100%" height="auto" autoplay></video>
-                        <button type="button" id="capture-photo" class="btn btn-primary mt-2">Ambil Foto</button>
+                        <button type="button" id="capture-photo" class="btn btn-primary mt-2" style="background-color: #0B6E45; border-color: #0B6E45; color: white;">Ambil Foto</button>
+<style>
+    #capture-photo:hover {
+        background-color: #085d3a!important; /* Warna lebih gelap saat hover */
+        border-color: #085d3a!important; /* Warna border lebih gelap saat hover */
+    }
+</style>
+
                     </div>
                     <div class="form-group">
                         <label for="photo-preview">Preview Foto:</label>
                         <img id="photo-preview" src="#" alt="Photo Preview" class="img-fluid" style="display:none;">
                     </div>
-                    <button type="button" class="btn btn-secondary" onclick="showSection(1)">Back</button>
-                    <button type="button" class="btn btn-primary" onclick="showSection(3)">Next</button>
+                    <button type="button" class="btn btn-secondary" onclick="showSection(1)" style="background-color: #0B6E45; border-color: #0B6E45; color: white;">Back</button>
+<button type="button" class="btn btn-primary" onclick="showSection(3)" style="background-color: #0B6E45; border-color: #0B6E45; color: white;">Next</button>
+<style>
+    .btn-secondary:hover, .btn-primary:hover {
+        background-color: #085d3a!important; /* Warna lebih gelap saat hover */
+        border-color: #085d3a!important; /* Warna border lebih gelap saat hover */
+    }
+</style>
+
                 </div>
 
                 <div id="section3" style="display: none;">
@@ -108,7 +137,14 @@
                     </div>
                     <div id="visitor-details-container"></div>
                     <button type="button" class="btn btn-secondary" onclick="showSection(2)">Back</button>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary" style="background-color: #0B6E45; border-color: #0B6E45; color: white;">Submit</button>
+<style>
+    .btn-primary:hover {
+        background-color: #085d3a; /* Warna lebih gelap saat hover */
+        border-color: #085d3a; /* Warna border lebih gelap saat hover */
+    }
+</style>
+
                 </div>
             </form>
         </div>

@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Access Forms')
+@section('title', 'Data Formulir')
 
 @section('content')
 <div class="container-fluid">
     <!-- Table Start -->
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Access Forms</h3>
+            <h3 class="card-title">Data Formulir</h3>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -107,27 +107,28 @@
 @section('styles')
 <style>
     .modal {
-        display: none; /* Hidden by default */
-        position: fixed; /* Stay in place */
-        z-index: 1; /* Sit on top */
-        left: 0;
-        top: 0;
-        width: 100%; /* Full width */
-        height: 100%; /* Full height */
-        overflow: auto; /* Enable scroll if needed */
-        background-color: rgb(0,0,0); /* Fallback color */
-        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-    }
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1050; /* Angka lebih tinggi dari navbar z-index */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
 
-    .modal-content {
-        background-color: #fefefe;
-        margin: 5% auto; /* 5% from the top and centered */
-        padding: 20px;
-        border: 1px solid #888;
-        width: 80%; /* Could be more or less, depending on screen size */
-        max-height: 80vh; /* Limit height to 80% of viewport */
-        overflow-y: auto; /* Enable vertical scrolling */
-    }
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto; /* 5% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+    max-height: 80vh; /* Limit height to 80% of viewport */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+
 
     .close {
         color: #aaa;
