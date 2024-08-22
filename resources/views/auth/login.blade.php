@@ -43,7 +43,7 @@
                 </form>
 
                 <p class="mt-3 mb-1">
-                    Belum punya akun? <a href="{{ route('register') }}">Daftar di sini</a>
+                    Belum punya akun? <a href="{{ route('register') }}" class="daftar-disini">Daftar di sini</a>
                 </p>
             </div>
         </div>
@@ -52,6 +52,7 @@
 
 @section('styles')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2.0/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         .login-box {
             width: 360px;
@@ -67,11 +68,28 @@
             border-radius: 5px;
         }
         .forgot-password-link {
-            color: #007bff;
+            color: #0B6E45;
             text-decoration: none;
         }
         .forgot-password-link:hover {
             text-decoration: underline;
         }
+        /* Tambahan untuk mengatur warna sesuai dengan template yang baru */
+        .btn-primary {
+            background-color: #0B6E45;
+            border-color: #0B6E45;
+        }
+        .btn-primary:hover {
+            background-color: #095837;
+            border-color: #095837;
+        }
+        .daftar-disini{
+            color:#0B6E45;
+        }
     </style>
+@endsection
+
+@section('scripts')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2.0/dist/js/adminlte.min.js"></script>
 @endsection

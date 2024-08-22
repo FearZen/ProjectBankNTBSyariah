@@ -74,12 +74,25 @@
         }
         .register-logo a {
             font-weight: bold;
-            color: #333;
+            color: #333; /* Ubah warna teks menjadi hijau */
         }
         .register-card-body {
             padding: 20px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
             border-radius: 5px;
+        }
+        .btn-primary {
+            background-color: #0B6E45; /* Warna hijau sesuai dengan tema */
+            border-color: #0B6E45;
+        }
+        .btn-primary:hover {
+            background-color: #094e32; /* Warna hijau yang lebih gelap saat hover */
+            border-color: #094e32;
+        }
+        .input-group-text {
+            background-color: #A2CA71; /* Warna latar belakang ikon input */
+            border-color: #A2CA71;
+            color: #000; /* Warna ikon */
         }
     </style>
 @endsection

@@ -14,6 +14,9 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\AnomalyController;
+
+Route::post('/report-anomalies', [AnomalyController::class, 'report']);
 
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])
     ->name('login');
