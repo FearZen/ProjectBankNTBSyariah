@@ -116,7 +116,8 @@
                 @if (Auth::check())
                     <div class="sidebar-profile">
                         <a class="d-flex align-items-center" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-user"> </i>{{ Auth::user()->name }}
+                            <i class="nav-icon fas fa-user"> {{ Auth::user()->name }}</i>
+                            
                         </a>
                         <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="profileDropdown">
                             <li><a class="dropdown-item" href="#"><i class="fas fa-user"></i> Profile</a></li>

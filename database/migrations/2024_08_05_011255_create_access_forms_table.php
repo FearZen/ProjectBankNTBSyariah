@@ -23,7 +23,7 @@ class CreateAccessFormsTable extends Migration
             $table->string('email');
             $table->date('date_of_request');
             $table->timestamps();
-            $table->string('photo')->nullable();
+            $table->longtext('photo')->nullable();
         });
     }
 

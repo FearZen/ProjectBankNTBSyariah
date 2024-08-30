@@ -28,13 +28,14 @@ class RegisteredUserController extends Controller
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+{
+    $validatedData = $request->validate([
+        'name' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+        'password' => ['required', 'string', 'min:8', 'confirmed', Rules\Password::defaults()],
+    ]);
 
+    try {
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -45,6 +46,10 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect()->route('dashboard');
+    } catch (\Exception $e) {
+        return redirect()->back()->with('warning', 'Terjadi kesalahan saat registrasi. Silakan coba lagi.');
     }
+}
+
 }

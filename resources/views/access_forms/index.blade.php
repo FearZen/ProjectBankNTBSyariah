@@ -8,36 +8,39 @@
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">Data Formulir</h3>
+            <a href="{{ url('export') }}" class="btn btn-success float-right">Download Excel</a>
         </div>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th>Nama Pemohon</th>
-                            <th>Nama Perusahaan</th>
-                            <th>Alamat</th>
-                            <th>Nomor Telepon</th>
-                            <th>Nomor Ponsel</th>
-                            <th>Alamat E-Mail</th>
-                            <th>Tanggal Permohonan</th>
-                            <th>Foto</th>
-                            <th>Negara</th>
-                            <th>Data Center</th>
-                            <th>Alamat Pusat Data</th>
-                            <th>Periode Kunjungan Dari (Tanggal)</th>
-                            <th>Periode Kunjungan Dari (Waktu)</th>
-                            <th>Periode Kunjungan Sampai (Tanggal)</th>
-                            <th>Periode Kunjungan Sampai (Waktu)</th>
-                            <th>Tujuan Kunjungan</th>
-                            <th>Izin Bekerja?</th>
-                            <th>Rack ID</th>
-                            <th>Detail Pengunjung</th>
+                            <th class="text-center">No.</th>
+                            <th class="text-center">Nama Pemohon</th>
+                            <th class="text-center">Nama Perusahaan</th>
+                            <th class="text-center">Alamat</th>
+                            <th class="text-center">Nomor Telepon</th>
+                            <th class="text-center">Nomor Ponsel</th>
+                            <th class="text-center">Alamat E-Mail</th>
+                            <th class="text-center">Tanggal Permohonan</th>
+                            <th class="text-center">Foto</th>
+                            <th class="text-center">Negara</th>
+                            <th class="text-center">Data Center</th>
+                            <th class="text-center">Alamat Pusat Data</th>
+                            <th class="text-center">Periode Kunjungan Dari (Tanggal)</th>
+                            <th class="text-center">Periode Kunjungan Dari (Waktu)</th>
+                            <th class="text-center">Periode Kunjungan Sampai (Tanggal)</th>
+                            <th class="text-center">Periode Kunjungan Sampai (Waktu)</th>
+                            <th class="text-center">Tujuan Kunjungan</th>
+                            <th class="text-center">Izin Bekerja?</th>
+                            <th class="text-center">Rack ID</th>
+                            <th class="text-center">Detail Pengunjung</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($forms as $form)
+                        @foreach ($forms as $index => $form)
                         <tr>
+                            <td class="text-center">{{ $index + 1 }}</td>
                             <td>{{ $form->requestor_name }}</td>
                             <td>{{ $form->company_name }}</td>
                             <td>{{ $form->address }}</td>
@@ -47,9 +50,9 @@
                             <td>{{ $form->date_of_request }}</td>
                             <td>
                                 @if ($form->photo)
-                                <img src="{{ asset('storage/' . $form->photo) }}" alt="Photo" class="img-thumbnail" style="max-width: 100px; cursor: pointer;" onclick="openPopup('{{ asset('storage/' . $form->photo) }}')">
+                                    <img src="data:image/jpeg;base64,{{ $form->photo }}" alt="Photo" class="img-thumbnail" style="max-width: 100px; cursor: pointer;" onclick="openPopup('data:image/jpeg;base64,{{ $form->photo }}')">
                                 @else
-                                No photo
+                                    No photo
                                 @endif
                             </td>
                             <td>{{ $form->country }}</td>
@@ -79,7 +82,7 @@
     <!-- Table End -->
 </div>
 
-<!-- Modal -->
+<!-- Modal for Visitor Details -->
 <div id="visitorDetailsModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
@@ -87,14 +90,14 @@
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th>Nama</th>
-                    <th>Jenis Pengunjung</th>
-                    <th>Jabatan</th>
-                    <th>Nama Perusahaan</th>
-                    <th>Nomor Identitas</th>
-                    <th>Nomor Telepon</th>
-                    <th>Email</th>
-                    <th>Nomor Kendaraan</th>
+                    <th class="text-center">Nama</th>
+                    <th class="text-center">Jenis Pengunjung</th>
+                    <th class="text-center">Jabatan</th>
+                    <th class="text-center">Nama Perusahaan</th>
+                    <th class="text-center">Nomor Identitas</th>
+                    <th class="text-center">Nomor Telepon</th>
+                    <th class="text-center">Email</th>
+                    <th class="text-center">Nomor Kendaraan</th>
                 </tr>
             </thead>
             <tbody id="visitor-details-body">
@@ -104,50 +107,82 @@
     </div>
 </div>
 
+<!-- Modal for Image Popup -->
+<div id="imageModal" class="modal">
+    <span class="close" onclick="closeImageModal()">&times;</span>
+    <img class="modal-content" id="modalImage">
+</div>
+
+@endsection
+
 @section('styles')
 <style>
     .modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1050; /* Angka lebih tinggi dari navbar z-index */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-}
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1050;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+    }
 
-.modal-content {
-    background-color: #fefefe;
-    margin: 5% auto; /* 5% from the top and centered */
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
-    max-height: 80vh; /* Limit height to 80% of viewport */
-    overflow-y: auto; /* Enable vertical scrolling */
-}
-
+    .modal-content {
+        margin: auto;
+        display: block;
+        width: 80%;
+        max-width: 700px;
+    }
 
     .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
+        position: absolute;
+        top: 15px;
+        right: 35px;
+        color: #f1f1f1;
+        font-size: 40px;
         font-weight: bold;
+        transition: 0.3s;
     }
 
     .close:hover,
     .close:focus {
-        color: black;
+        color: #bbb;
         text-decoration: none;
         cursor: pointer;
+    }
+
+    /* Responsive layout for the modal image */
+    @media only screen and (max-width: 700px){
+        .modal-content {
+            width: 100%;
+        }
+    }
+
+    /* Centering text in the header */
+    .table th {
+        text-align: center;
+        vertical-align: middle;
     }
 </style>
 @endsection
 
 @section('scripts')
 <script>
+    function openPopup(imageSrc) {
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+
+        modal.style.display = 'block';
+        modalImg.src = imageSrc;
+    }
+
+    function closeImageModal() {
+        const modal = document.getElementById('imageModal');
+        modal.style.display = 'none';
+    }
+
     function showVisitorDetails(formId) {
         const visitorDetailsBody = document.getElementById('visitor-details-body');
         visitorDetailsBody.innerHTML = '';
@@ -194,6 +229,19 @@
     function closeModal() {
         document.getElementById('visitorDetailsModal').style.display = 'none';
     }
+
+    // Tutup modal saat klik di luar konten modal
+    window.onclick = function(event) {
+        const imageModal = document.getElementById('imageModal');
+        const visitorDetailsModal = document.getElementById('visitorDetailsModal');
+
+        if (event.target == imageModal) {
+            closeImageModal();
+        }
+
+        if (event.target == visitorDetailsModal) {
+            closeModal();
+        }
+    }
 </script>
-@endsection
 @endsection

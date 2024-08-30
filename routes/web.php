@@ -15,6 +15,12 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\AnomalyController;
+use App\Exports\FormsExport;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Controllers\ExcelController;
+
+Route::get('/export', [ExcelController::class, 'export'])->name('export');
+
 
 Route::post('/report-anomalies', [AnomalyController::class, 'report']);
 

@@ -9,9 +9,23 @@
         </div>
         <div class="card">
             <div class="card-body register-card-body">
+
+                {{-- Pesan kesalahan validasi --}}
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                {{-- Form registrasi --}}
                 <form method="POST" action="{{ route('register') }}">
                     @csrf
 
+                    {{-- Input nama --}}
                     <div class="input-group mb-3">
                         <input type="text" id="name" name="name" class="form-control" placeholder="{{ __('Name') }}" value="{{ old('name') }}" required autofocus>
                         <div class="input-group-append">
@@ -21,6 +35,7 @@
                         </div>
                     </div>
 
+                    {{-- Input email --}}
                     <div class="input-group mb-3">
                         <input type="email" id="email" name="email" class="form-control" placeholder="{{ __('Email') }}" value="{{ old('email') }}" required>
                         <div class="input-group-append">
@@ -30,6 +45,7 @@
                         </div>
                     </div>
 
+                    {{-- Input password --}}
                     <div class="input-group mb-3">
                         <input type="password" id="password" name="password" class="form-control" placeholder="{{ __('Password') }}" required>
                         <div class="input-group-append">
@@ -39,6 +55,7 @@
                         </div>
                     </div>
 
+                    {{-- Konfirmasi password --}}
                     <div class="input-group mb-3">
                         <input type="password" id="password_confirmation" name="password_confirmation" class="form-control" placeholder="{{ __('Confirm Password') }}" required>
                         <div class="input-group-append">
@@ -48,6 +65,7 @@
                         </div>
                     </div>
 
+                    {{-- Tombol daftar dan link untuk login --}}
                     <div class="row">
                         <div class="col-8">
                             <a class="btn btn-link" href="{{ route('login') }}">
@@ -74,7 +92,7 @@
         }
         .register-logo a {
             font-weight: bold;
-            color: #333; /* Ubah warna teks menjadi hijau */
+            color: #333;
         }
         .register-card-body {
             padding: 20px;
@@ -82,17 +100,23 @@
             border-radius: 5px;
         }
         .btn-primary {
-            background-color: #0B6E45; /* Warna hijau sesuai dengan tema */
+            background-color: #0B6E45;
             border-color: #0B6E45;
         }
         .btn-primary:hover {
-            background-color: #094e32; /* Warna hijau yang lebih gelap saat hover */
+            background-color: #094e32;
             border-color: #094e32;
         }
         .input-group-text {
-            background-color: #A2CA71; /* Warna latar belakang ikon input */
+            background-color: #A2CA71;
             border-color: #A2CA71;
-            color: #000; /* Warna ikon */
+            color: #000;
+        }
+        .alert-danger {
+            margin-bottom: 20px;
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
         }
     </style>
 @endsection

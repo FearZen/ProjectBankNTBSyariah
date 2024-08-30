@@ -40,41 +40,44 @@ class AccessFormController extends Controller
 
     // Menyimpan data formulir ke database
     public function store(Request $request)
-    {
-        // Validasi data
-        $validatedData = $request->validate([
-            'requestor_name' => 'required|string|max:255',
-            'company_name' => 'required|string|max:255',
-            'address' => 'required|string',
-            'phone_number' => 'required|string',
-            'mobile_number' => 'required|string',
-            'email' => 'required|email',
-            'date_of_request' => 'required|date',
-            'country' => 'required|string',
-            'data_center' => 'required|string',
-            'data_center_address' => 'required|string',
-            'visit_from_date' => 'required|date',
-            'visit_from_time' => 'required|date_format:H:i',
-            'visit_to_date' => 'required|date',
-            'visit_to_time' => 'required|date_format:H:i',
-            'visit_purpose' => 'required|string|max:255',
-            'rack_id' => 'required|string|max:255',
-            'number_of_visitors' => 'required|integer',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Validasi foto
-        ]);
+{
+    // Validasi data
+    $validatedData = $request->validate([
+        'requestor_name' => 'required|string|max:255',
+        'company_name' => 'required|string|max:255',
+        'address' => 'required|string',
+        'phone_number' => 'required|string',
+        'mobile_number' => 'required|string',
+        'email' => 'required|email',
+        'date_of_request' => 'required|date',
+        'country' => 'required|string',
+        'data_center' => 'required|string',
+        'data_center_address' => 'required|string',
+        'visit_from_date' => 'required|date',
+        'visit_from_time' => 'required|date_format:H:i',
+        'visit_to_date' => 'required|date',
+        'visit_to_time' => 'required|date_format:H:i',
+        'visit_purpose' => 'required|string|max:255',
+        'permit_to_work' => 'required|string',
+        'rack_id' => 'required|string|max:255',
+        'number_of_visitors' => 'nullable|integer',
+        'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Validasi foto
+    ]);
 
-        // Proses upload foto jika ada
-        if ($request->hasFile('photo')) {
-            $photoPath = $request->file('photo')->store('photos', 'public');
-            $validatedData['photo'] = $photoPath;
-        }
+    // Proses upload foto jika ada
+    if ($request->hasFile('photo')) {
+        $photo = $request->file('photo');
+        $photoBase64 = base64_encode(file_get_contents($photo->getRealPath()));
+        $validatedData['photo'] = $photoBase64;
+    }
 
-        // Simpan data ke database
-        $form = AccessForm::create($validatedData);
+    // Simpan data ke database
+    $form = AccessForm::create($validatedData);
 
-        // Simpan data pengunjung
+    // Simpan data pengunjung jika ada
+    if ($validatedData['number_of_visitors'] && $validatedData['number_of_visitors'] > 0) {
         for ($i = 1; $i <= $validatedData['number_of_visitors']; $i++) {
-            if ($request->has("visitor_name_$i")) {
+            if ($request->filled("visitor_name_$i")) {
                 $form->visitors()->create([
                     'visitor_name' => $request->input("visitor_name_$i"),
                     'visitor_type' => $request->input("visitor_type_$i"),
@@ -87,8 +90,9 @@ class AccessFormController extends Controller
                 ]);
             }
         }
-
-        // Redirect dengan pesan sukses
-        return redirect()->route('access_forms.index')->with('success', 'Formulir berhasil disimpan!');
     }
+
+    // Redirect dengan pesan sukses
+    return redirect()->route('access_forms.index')->with('success', 'Formulir berhasil disimpan!');
+}
 }

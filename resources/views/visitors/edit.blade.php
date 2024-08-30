@@ -2,7 +2,7 @@
 
 @section('title', 'Edit Pengunjung')
 
-@section('content')
+@section('content') 
 <div class="container">
     <h1>Edit Pengunjung</h1>
 
@@ -37,5 +37,6 @@
 
         <button type="submit" class="btn btn-primary">Simpan</button>
     </form>
+    
 </div>
 @endsection

@@ -3,6 +3,30 @@
 @section('title', 'Daftar Pengunjung')
 
 @section('content')
+<style>
+    .pagination {
+    justify-content: flex-start; /* Menyelaraskan pagination ke kiri */
+}
+
+.page-item .page-link {
+    color: #0B6E45; /* Mengubah warna teks */
+    border-color: #0B6E45; /* Mengubah warna border */
+    margin-right: 5px; /* Menggeser tombol sedikit ke kiri dengan menambahkan margin di kanan */
+}
+
+.page-item.active .page-link {
+    background-color: #0B6E45; /* Mengubah warna latar belakang tombol aktif */
+    border-color: #0B6E45; /* Mengubah warna border tombol aktif */
+}
+
+.page-link:hover {
+    background-color: #0B6E45; /* Mengubah warna latar belakang saat hover */
+    border-color: #0B6E45; /* Mengubah warna border saat hover */
+    color: #fff; /* Mengubah warna teks saat hover */
+}
+
+    
+</style>
 <div class="container">
     <h1>Daftar Pengunjung</h1>
 
@@ -61,6 +85,7 @@
     </table>
 
     <!-- Pagination -->
-    {{ $visitors->links() }}
+    {{ $visitors->links('pagination::bootstrap-5') }}
+
 </div>
 @endsection
