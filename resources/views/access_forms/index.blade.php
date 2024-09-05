@@ -86,7 +86,7 @@
 <div id="visitorDetailsModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
-        <h2>Visitor Details</h2>
+        <h2>Detail Pengunjung</h2>
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
@@ -126,44 +126,46 @@
         width: 100%;
         height: 100%;
         overflow: auto; /* Enable scroll if needed */
-        background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+        background-color: rgba(0,0,0,0.8); /* Black w/ opacity */
     }
 
     .modal-content {
-        margin: auto;
+        margin: 10% auto;
         display: block;
-        width: 80%;
-        max-width: 700px;
+        width: 90%;
+        max-width: 1200px; /* Adjust as needed */
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .modal-content img.modal-content {
+        max-width: 100%!important;
+        height: auto!important;
     }
 
     .close {
         position: absolute;
         top: 15px;
-        right: 35px;
-        color: #f1f1f1;
-        font-size: 40px;
+        right: 15px;
+        color: #333;
+        font-size: 30px;
         font-weight: bold;
         transition: 0.3s;
     }
 
     .close:hover,
     .close:focus {
-        color: #bbb;
+        color: #666;
         text-decoration: none;
         cursor: pointer;
     }
 
-    /* Responsive layout for the modal image */
-    @media only screen and (max-width: 700px){
+    @media only screen and (max-width: 800px){
         .modal-content {
-            width: 100%;
+            width: 95%;
         }
-    }
-
-    /* Centering text in the header */
-    .table th {
-        text-align: center;
-        vertical-align: middle;
     }
 </style>
 @endsection
@@ -220,7 +222,7 @@
             .catch(error => {
                 console.error('There was a problem with the fetch operation:', error);
                 const row = document.createElement('tr');
-                row.innerHTML = `<td colspan="8">Failed to load visitor details</td>`;
+                row.innerHTML = `<td colspan="8">Error fetching visitor details</td>`;
                 visitorDetailsBody.appendChild(row);
                 document.getElementById('visitorDetailsModal').style.display = 'block';
             });
@@ -230,16 +232,9 @@
         document.getElementById('visitorDetailsModal').style.display = 'none';
     }
 
-    // Tutup modal saat klik di luar konten modal
     window.onclick = function(event) {
-        const imageModal = document.getElementById('imageModal');
-        const visitorDetailsModal = document.getElementById('visitorDetailsModal');
-
-        if (event.target == imageModal) {
+        if (event.target.className === 'modal') {
             closeImageModal();
-        }
-
-        if (event.target == visitorDetailsModal) {
             closeModal();
         }
     }

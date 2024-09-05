@@ -179,7 +179,7 @@
                         <input type="text" class="form-control" name="visit_purpose" id="visit_purpose" required>
                     </div>
                     <div class="form-group">
-                        <label for="permit_to_work">Pilihan Yes/No:</label>
+                        <label for="permit_to_work">Izin Bekerja :</label>
                         <select class="form-control" name="permit_to_work" id="permit_to_work" required>
                             <option value="Yes">Yes</option>
                             <option value="No">No</option>
@@ -203,16 +203,18 @@
                 </div>
 
                 <!-- Section 3 -->
+                <!-- Section 3 -->
                 <div id="section3" style="display: none;">
                     <h4>Detail Pengunjung | Visitor Details</h4>
                     <div class="form-group">
                         <label for="visitor_count">Jumlah Pengunjung (Number of Visitors):</label>
-                        <input type="number" class="form-control" name="number_of_visitors" id="visitor_count" min="1">
+                        <input type="number" class="form-control" name="number_of_visitors" id="visitor_count" min="1" required>
                     </div>
                     <div id="visitor-details-container"></div>
                     <button type="button" class="btn btn-secondary" data-prev-section="2">Back</button>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
+
             </form>
         </div>
     </div>
@@ -307,4 +309,59 @@
         showSection(1);
     });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const visitorCountInput = document.getElementById('visitor_count');
+        const visitorDetailsContainer = document.getElementById('visitor-details-container');
+
+        visitorCountInput.addEventListener('change', function() {
+            const numberOfVisitors = parseInt(visitorCountInput.value, 10);
+            visitorDetailsContainer.innerHTML = ''; // Kosongkan container
+
+            if (numberOfVisitors > 0) {
+                for (let i = 1; i <= numberOfVisitors; i++) {
+                    const visitorForm = `
+                        <div class="visitor-form-group">
+                            <h5>Pengunjung ${i}</h5>
+                            <div class="form-group">
+                                <label for="visitor_name_${i}">Nama (Name):</label>
+                                <input type="text" class="form-control" name="visitor_name_${i}" id="visitor_name_${i}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="visitor_type_${i}">Jenis Pengunjung (Visitor Type):</label>
+                                <input type="text" class="form-control" name="visitor_type_${i}" id="visitor_type_${i}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="visitor_designation_${i}">Jabatan (Designation):</label>
+                                <input type="text" class="form-control" name="visitor_designation_${i}" id="visitor_designation_${i}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="visitor_company_${i}">Nama Perusahaan (Company Name):</label>
+                                <input type="text" class="form-control" name="visitor_company_${i}" id="visitor_company_${i}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="visitor_id_${i}">Nomor Identitas Pemerintah atau Nomor Paspor (5 karakter terakhir) (Government Identity Number or Passport Number (Last 5 characters)):</label>
+                                <input type="text" class="form-control" name="visitor_id_${i}" id="visitor_id_${i}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="visitor_phone_${i}">Nomor Telepon dan / atau Nomor Ponsel (Phone number and/or Mobile Phone number):</label>
+                                <input type="text" class="form-control" name="visitor_phone_${i}" id="visitor_phone_${i}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="visitor_email_${i}">Alamat Email (Email Address):</label>
+                                <input type="email" class="form-control" name="visitor_email_${i}" id="visitor_email_${i}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="visitor_vehicle_${i}">Nomor Kendaraan (Vehicle Number):</label>
+                                <input type="text" class="form-control" name="visitor_vehicle_${i}" id="visitor_vehicle_${i}" required>
+                            </div>
+                        </div>
+                    `;
+                    visitorDetailsContainer.insertAdjacentHTML('beforeend', visitorForm);
+                }
+            }
+        });
+    });
+</script>
+
 @endsection
